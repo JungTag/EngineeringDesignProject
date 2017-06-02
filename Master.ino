@@ -1,10 +1,3 @@
-/*
- * Wire : Master
- * Board # : 1
- * Components : Piezo Speaker, Temperature Humidity senser, RFID module, two LED
- * 
- */
-
 #include <AddicoreRFID.h> // RFID library
 #include <SPI.h> // RFID library
 #include <Wire.h> // I2C communication library
@@ -57,8 +50,8 @@ class DailyLook {
 
     String name = " ";
     int* category = {}; // 0;jacket, 1;top, 2;pants, 3;skirt
-    int colors[COLOR_SIZE][3] = {};
-    int  score = 0;
+    int colors[][COLOR_SIZE][3] = {};
+    int score = 0;
     int temperBase = -1;
     int temperLimit = -1;
     int humidBase = -1;
@@ -70,21 +63,14 @@ class DailyLook {
       Serial.println("no input!!");
     }
 
-    DailyLook(String name,  int category[3],  int colors[COLOR_SIZE][3],
+    DailyLook(String name,  int category[][3],  int colors[][COLOR_SIZE][3],
               int temperBase, int temperLimit,  int humidBase,  int humidLimit)
       : name(name)
       , category(category)
       , temperBase(temperBase)
       , temperLimit(temperLimit)
       , humidBase(humidBase)
-      , humidLimit(humidLimit) {
-
-      for (int i = 0; i < 3; ++i) {
-         for (int j = 0; j < COLOR_SIZE; ++j) {
-          this->colors[j][i] = colors[j][i];
-         }
-      }
-    }
+      , humidLimit(humidLimit) 
 
     String getName() {
       return name;
@@ -135,12 +121,15 @@ class DailyLook {
     void setCurrentUse(boolean currentUse) {
       currentUse = currentUse;
     }
-    void toString() {
+    void toString()
+{
         Serial.print("name : "); Serial.print(this->getName());
         Serial.print("\tscore : "); Serial.print(this->getScore());
         Serial.print("\tcategory : ");
-        for (int i=0; this->getCategory()[i]!=-1 && i<COLOR_SIZE; ++i){
-          switch(this->getCategory()[i]){
+        for (int i=0; this->getCategory()[i]!=-1 && i<COLOR_SIZE; ++i)
+{
+          switch(this->getCategory()[i])
+{
             case 0 :
              Serial.print("Outer");
              break;
@@ -236,24 +225,16 @@ int readButton(){
 /*
  * send a message to slave
  */
+
 void sendRGB(int category, int* rgb){
-  Wire.beginTransmission(4);
+  Wire.beginTransmission(2);
   Wire.write(1); //sending RGB light value
   Wire.write(category);
   for (int i=0; i<3; ++i){
-    Wire.write(rgb[i]);   
+    Wire.write(rgb[i]);
   }
   Wire.endTransmission();
-}
-
-
-void sendTempHumid(float curtemp, float curhumid){
-  Wire.beginTransmission(4);
-  Wire.write(3); //sending RGB light value
-  Wire.write(curtemp);
-  Wire.write(curhumid);   
-  Wire.endTransmission();
-}
+}			//sendRGB end
 
 void sendMessage(char yesno, String msg)
 {      /*
@@ -274,31 +255,320 @@ void sendMessage(char yesno, String msg)
   delay(500);
 }
 
+//sangwu의 코디와 옷장
+int scate[][3] = {
+	{1, 2, -1},
+	{1, 2, -1},
+{1, 2, -1},
+	{1, 2, -1},
+	{1, 2, -1},
+	{1, 2, -1},
+	{1, 2, -1},
+	{1, 2, -1},
+	{1, 2, -1},
+	{1, 2, -1},
+	{1, 2, -1},
+	{0, 1, 2},
+	{0, 1, 2},
+	{0, 1, 2},
+	{1, 2, -1},
+	{0, 1, 2},
+	{0, 1, 2},
+	{0, 1, 2},
+	{0, 1, 2}, 
+	{0, 1, 2},
+};
 
-void scoreDailyLook () {
-  /*
-     TODO 점수 매기기
-  */
+int scolor[][3][3] = {
+	{
+		{255, 255, 255},
+		{255, 255, 255},
+		{-1, -1, -1}
+	},
+	{
+		{255, 255, 0},
+		{255, 255, 255},
+		{-1, -1, -1}
+	},
+	{
+		{0, 0, 0},
+		{255, 255, 255},
+		{-1, -1, -1}
+	},
+	{
+		{255, 255, 0},
+		{0, 0, 0},
+		{-1, -1, -1}
+	},
+	{
+		{255, 0, 255},
+		{0, 0, 255},
+		{-1, -1, -1}
+	},
+	{
+		{255, 255, 255},
+		{0, 0, 0},	
+		{-1, -1, -1}
+	},
+	{
+		{0, 0, 0},
+		{0, 255, 0},
+		{-1, -1, -1}
+	},
+	{
+		{255, 255, 255},
+		{255, 255, 255},
+		{-1, -1, -1}
+	},
+	{
+		{255, 255, 255},
+		{0, 0, 255},
+		{-1, -1, -1}
+	},
+	{
+		{255, 0, 255},
+		{255, 255, 255},
+		{-1, -1, -1}
+	},
+	{
+		{0, 255, 0},
+		{0, 0, 255},
+		{-1, -1, -1}
+	},
+	{
+		{255, 255, 255},
+		{255, 255, 255},
+		{0, 0, 255}
+	},
+	{
+		{0, 0, 255},
+		{255, 255, 255},
+		{0, 0, 0}
+	},
+	{
+		{0, 255, 0},
+		{255, 0, 255},
+		{0, 0, 255}
+	},
+	{
+		{0, 0, 255},
+		{255, 255, 255},
+		{-1, -1, -1}
+	},
+	{
+		{255, 255, 255},
+		{255, 255, 255},
+		{0, 0, 255}
+	},
+	{
+		{0, 0, 255},
+		{255, 0, 255},
+		{0, 0, 255}
+	},
+	{
+		{0, 255, 0},
+		{255, 255, 255},
+		{255, 255, 255}
+	},
+	{
+		{255, 0, 255},
+		{0, 0, 0},
+		{0, 0, 255}
+	},
+	{
+		{255, 255, 255},
+		{255, 255, 255},
+		{0, 0, 0}
+	}
+};
+
+DailyLook sdl1 = DailyLook(String("paleblue_shirt & ivory_pants"), scate[0][0], scolor[0][0][0], 11, 20, 65, 74);
+DailyLook sdl2 = DailyLook(String("deepyellow_shirt & white_pants"), scate[1][0], scolor[1][0][0], 11, 20, 65, 74);
+DailyLook sdl3 = DailyLook(String("black_shirt & yellow_pants"), scate[2][0], scolor[2][0][0], 11, 20, 65, 74);
+DailyLook sdl4 = DailyLook(String("orange_shirt & black_pants"), scate[3][0], scolo[3][0][0]r, 11, 20, 65, 74);
+DailyLook sdl5 = DailyLook(String("wine_shirt & deepblue_pants"), scate[4][0], scolor[4][0][0], 11, 20, 65, 74);
+DailyLook sdl6 = DailyLook(String("white_shirt & black_pants"), scate[5][0], scolor[5][0][0], 21, 50, 75, 100);
+DailyLook sdl7 = DailyLook(String("black_shirt & deepgreen_pants"), scate[6][0], scolor[6][0][0], 21, 50, 75, 100);
+DailyLook sdl8 = DailyLook(String("pink_shirt & ivory_pants"), scate[7][0], scolor[7][0][0], 21, 50, 75, 100);
+DailyLook sdl9 = DailyLook(String("palepurple_shirt & deepblue_pants"), scate[8][0], scolor[8][0][0], 21, 50, 75, 100);
+DailyLook sdl10 = DailyLook(String("navy_shirt & yellow_pants"), scate[9][0], scolor[9][0][0], 21, 50, 0, 100);
+DailyLook sdl11 = DailyLook(String("deepgreen_shirt & deepblue_pants"), scate[10][0], scolor[10][0][0], 11, 20 , 65, 74);
+DailyLook sdl12 = DailyLook(String("palebrown_outer & ivory_shirt & deepblue_pants"), scate[11][0], scolor[11][0][0], 11, 20, 65, 74);
+DailyLook sdl13 = DailyLook(String("deepblue_outer & white_shirt & black_pants"), scate[12][0], scolor[12][0][0], 11, 20, 65, 74);
+DailyLook sdl14 = DailyLook(String("deepgreen_outer & wine_shirt & deepblue_pants"), scate[13][0], scolor[13][0][0], 11, 20, 65, 74);
+DailyLook sdl15 = DailyLook(String("deepblue_shirt & palebrown_pants"), scate[14][0], scolor[14][0][0], 11, 20, 65, 74);
+DailyLook sdl16 = DailyLook(String("palebrown_outer & grey_shirt & deepblue_pants"), scate[15][0], scolor[15][0][0], -40, 10, 0, 65);
+DailyLook sdl17 = DailyLook(String("deepblue_outer & wine_shirt & deepblue_pants"), scate[16][0], scolor[16][0][0], -40, 10, 0, 65);
+DailyLook sdl18 = DailyLook(String("deepgreen_outer & grey_shirt & ivory_pants"), scate[17][0], scolor[17][0][0], -40, 10, 0, 65);
+DailyLook sdl19 = DailyLook(String("wine_outer & black_shirt & deepblue_pants"), scate[18][0], scolor[18][0][0], -40, 10, 0, 65);
+DailyLook sdl20 = DailyLook(String("grey_outer & white_shirt & black_pants"), scate[19][0], scolor[19][0][0], -40, 10, 0, 65);
+
+DailyLook* SangwuList[] = { &sdl1, &sdl2, &sdl3, &sdl4, &sdl5, &sdl6, &sdl7, &sdl8, &sdl9, &sdl10, &sdl11, &sdl12, &sdl13, &sdl14, &sdl15, &sdl16, &sdl17, &sdl18, &sdl19, &sdl20 };
+
+Closet* sangwuCloset = new Closet("Sangwu", 23);
+
+//eunjin의 코디와 옷장
+int ecate[][3] = {
+	{1, 3 -1},
+	{1, 3 -1},
+	{1, 3 -1},
+	{1, 2, -1},
+	{1, 2, -1},
+	{1, 2, -1},
+	{1, 2, -1},
+	{1, 3, -1},
+	{1, 3, -1},
+	{1, 3, -1},
+	{1, 2, -1},
+	{0, 1, 2},
+	{0, 1, 2},
+	{0, 1, 3},
+	{0, 1, 3},
+	{0, 1, 2},
+	{0, 1, 3},
+	{0, 1, 2},
+	{0, 1, 2},
+	{0, 1, 2}
+};
+
+int ecolor[][3][3] = {
+ {
+		{255, 255, 255},
+		{255, 255, 255},
+		{-1, -1, -1}
+	},
+	{
+		{255, 255, 255},
+		{255, 255, 255},
+		{-1, -1, -1}
+	},
+{
+	{255, 255, 255},
+	{255, 0, 255},
+	{-1, -1, -1}
+},
+{
+	{255, 0, 255},
+	{255, 255, 255},
+	{-1, -1, -1}
+},
+{
+	{255, 255, 255},
+	{255, 255, 255},
+	{-1, -1, -1}
+},
+{
+	{255, 255, 255},
+	{255, 0, 255},
+	{-1, -1, -1}
+},
+{
+	{255, 255, 255},
+	{255, 0, 255},
+	{-1, -1, -1}
+},
+{
+	{255, 255, 255},
+	{255, 255, 255},
+	{-1, -1, -1}
+},
+{
+	{255, 0, 0},
+	{255, 255, 255},
+	{-1, -1, -1}
+},
+{
+	{255, 255, 255},
+	{255, 0, 255},
+	{-1, -1, -1}
+},
+{
+	{255, 255, 255},
+	{255, 255, 255},
+	{-1, -1, -1}
+},
+{
+	{255, 255, 255},
+	{255, 255, 255},
+	{255, 0, 255}
+},
+{
+	{255, 255, 0},
+	{255, 255, 255},
+	{0, 0, 0}
+},
+{
+	{255, 255, 255},
+	{255, 255, 255},
+	{255, 0, 0}
+},
+{
+	{0, 0, 0},
+	{255, 255, 255},
+	{255, 255, 0}
+},
+{
+	{255, 255, 255},
+	{255, 0, 255},
+	{255, 255, 255}
+},
+{
+	{255, 255, 255},
+	{0, 0, 0},
+	{255, 0, 255}
+},
+{
+	{0, 0, 0},
+	{0, 0, 255},
+	{0, 0, 0}
+},
+{
+	{255, 255, 255},
+	{255, 255, 255},
+	{255, 0, 255}
+},
+{
+	{0, 0, 255},
+	{255, 255, 255},
+	{0, 0, 0}
+ };
 }
 
-int cate1[] =  {1, 2};
-int color1[2][3] = {{255, 255, 255}, {0, 0, 255}};
-int cate2[] = {1, 3};
-int color2[2][3] = {{0, 0, 0}, {255, 0, 0}};
-DailyLook dl1 = DailyLook(String("Whiteshirt&bluepants"), cate1, color1, 15, 28, 0, 100);
-DailyLook dl2 = DailyLook(String("BlackSweater&redpants"), cate2, color2, 0, 50, 0, 100);
+DailyLook edl1 = DailyLook(String("white_shirt & pink_skirt"), ecate[0][0], ecolor[0][0][0], 11, 20, 65, 74);
+DailyLook edl2 = DailyLook(String("yellowgreen_shirt & white_skirt"), ecate[1][0], ecolor[1][0][0], 11, 20, 65, 74);
+DailyLook edl3 = DailyLook(String("white_shirt & wine_skirt"), ecate[2][0], ecolor[2][0][0], 11, 20, 65, 74);
+DailyLook edl4 = DailyLook(String("blue_shirt & white_pants"), ecate[3][0], scolo[3][0][0]r, 11, 20, 65, 74);
+DailyLook edl5 = DailyLook(String("pink_shirt & yellow_pants"), ecate[4][0], ecolor[4][0][0], 11, 20, 65, 74);
+DailyLook edl6 = DailyLook(String("white_shirt & blue_pants"), ecate[5][0], ecolor[5][0][0], 21, 50, 75, 100);
+DailyLook edl7 = DailyLook(String("yellow_shirt & blue_pants"), ecate[6][0], ecolor[6][0][0], 21, 50, 75, 100);
+DailyLook edl8 = DailyLook(String("purple_shirt & pink_skirt"), ecate[7][0], ecolor[7][0][0], 21, 50, 75, 100);
+DailyLook edl9 = DailyLook(String("red_shirt & purple_skirt"), ecate[8][0], ecolor[8][0][0], 21, 50, 75, 100);
+DailyLook edl10 = DailyLook(String("pink_shirt & navy_skirt"), ecate[9][0], ecolor[9][0][0], 21, 50, 0, 100);
+DailyLook edl11 = DailyLook(String("purple_shirt & grey_pants"), ecate[10][0], ecolor[10][0][0], 11, 20 , 65, 74);
+DailyLook edl12 = DailyLook(String("beige_outer & pea_shirt & blue_pants"), ecate[11][0], ecolor[11][0][0], 11, 20, 65, 74);
+DailyLook edl13 = DailyLook(String("brown_outer & white_shirt & black_pants"), ecate[12][0], ecolor[12][0][0], 11, 20, 65, 74);
+DailyLook edl14 = DailyLook(String("ivory_outer & purple_shirt & red_skirt"), ecate[13][0], ecolor[13][0][0], 11, 20, 65, 74);
+DailyLook edl15 = DailyLook(String("black_outer & white_shirt & deepgreen_skirt"), ecate[14][0], ecolor[14][0][0], 11, 20, 65, 74);
+DailyLook edl16 = DailyLook(String("mint_outer & blue_shirt & white_pants"), ecate[15][0], ecolor[15][0][0], -40, 10, 0, 65);
+DailyLook edl17 = DailyLook(String("palebrown_outer & black_shirt & wine_skirt"), ecate[16][0], ecolor[16][0][0], -40, 10, 0, 65);
+DailyLook edl18 = DailyLook(String("black_outer & deepblue_shirt & black_pants"), ecate[17][0], ecolor[17][0][0], -40, 10, 0, 65);
+DailyLook edl19 = DailyLook(String("grey_outer & white_shirt & blue_pants"), ecate[18][0], ecolor[18][0][0], -40, 10, 0, 65);
+DailyLook edl20 = DailyLook(String("deepblue_outet & grey_shirt & black_pants"), ecate[19][0], ecolor[19][0][0], -40, 10, 0, 65);
 
-DailyLook* MinsuList[] = {&dl1, &dl2};
+DailyLook* EunjinList[] = {&edl1, &edl2, &edl3, &edl4, &edl5, &edl6, &edl7, &edl8, &edl9, &edl10, &edl11, &edl12, &edl13, &edl14, &edl15, &edl16, &edl17, &edl18, &edl19, &edl20};
 
-Closet* minsuCloset = new Closet("Minsu", 23);
+Closet* eunjinCloset = new Closet("Eunjin", 23);
 
+                                 
 void setup() {
 
   MusicLib musics;
 
   Serial.begin(9600); 
-  minsuCloset->setList(MinsuList);
-  //led setup  
+  sangwuCloset->setList(SangwuList);
+  eunjinCloset->setList(EunjinList);
+ 
+  //led setup 
   pinMode(LED3_RED, OUTPUT);
   pinMode(LED3_GRE, OUTPUT);
   pinMode(LED3_BLU, OUTPUT);
@@ -342,37 +612,35 @@ void loop() {
     status = myRFID.AddicoreRFID_Anticoll(str);
     if (status == MI_OK)      //MIFARE 카드일때만 작동
     {
-          /*
-          checksum1 = str[0] ^ str[1] ^ str[2] ^ str[3];
-          Serial.println("The tag's number is  : ");
-            //Serial.print(2);
-            Serial.print(str[0]);
-          Serial.print(" , ");
-            Serial.print(str[1],BIN);
-          Serial.print(" , ");
-            Serial.print(str[2],BIN);
-          Serial.print(" , ");
-            Serial.print(str[3],BIN);
-          Serial.print(" , ");
-            Serial.print(str[4],BIN);
-          Serial.print(" , ");
-          Serial.println(checksum1,BIN);
-          */ 
-            // Should really check all pairs, but for now we'll just use the first
-            if(str[0] == 100)                      //RFID 태그의 ID값이 100번이면 Eunjin의 카드
-            {
+if(str[0] == 64) {             //RFID 태그의 ID값이 64번이면 Sangwu의 카드
+DailyLook recommand[] = {};
+for (int i=0; i < 20; i++)
+{
+			recommand[i]->getScore();		//recommand에는 점수가 저장되어 있음
+}
+		for (int i=0; i < 20; i++)
+		{
+		}
+
+             //반복문으로 코디 탐색하다가 온도 만족하면 코디 string 출력, RGB값 전송		//그렇지 않으면 continue
+             //no 선택 시 반복문 반복			//yes 선택 시 프로그램 종료
+             //i가 19가 되면 추천 코디 소진 알림
+            }
+                
+           else if(str[0] == 100) {            //RFID 태그의 ID값이 100번이면 Eunjin의 카드
                 Serial.print("Hello Eunjin!\n");
-            } else if(str[0] == 170) {             //RFID 태그의 ID값이 64번이면 Sangwu의 카드
-                Serial.print("Hello Sangwu!\n");
-            } else {
+            
+            //반복문으로 코디 탐색하다가 온도 만족하면 코디 string 출력, RGB값 전송		//그렇지 않으면 continue
+             //no 선택 시 반복문 반복			//yes 선택 시 프로그램 종료
+             //i가 19가 되면 추천 코디 소진 알림
+            } 
+           else {
                Serial.print("Wrong Input!\n");
             }
             Serial.println();
             delay(1000);
     } else {
-      /*
-       * 날씨 출력함수
-       */
+     printWeather(curtemp, curhumid);
     }
         myRFID.AddicoreRFID_Halt();           //Command tag into hibernation    
 }
@@ -404,3 +672,5 @@ void printWeather(int temper, int humid) {
 
   */
 }
+
+d
