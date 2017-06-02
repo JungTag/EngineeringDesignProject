@@ -50,7 +50,7 @@ class DailyLook {
 
     String name = " ";
     int* category = {}; // 0;jacket, 1;top, 2;pants, 3;skirt
-    int colors[COLOR_SIZE][3] = {};
+    int colors[][COLOR_SIZE][3] = {};
     int score = 0;
     int temperBase = -1;
     int temperLimit = -1;
@@ -63,21 +63,14 @@ class DailyLook {
       Serial.println("no input!!");
     }
 
-    DailyLook(String name,  int category[3],  int colors[COLOR_SIZE][3],
+    DailyLook(String name,  int category[][3],  int colors[][COLOR_SIZE][3],
               int temperBase, int temperLimit,  int humidBase,  int humidLimit)
       : name(name)
       , category(category)
       , temperBase(temperBase)
       , temperLimit(temperLimit)
       , humidBase(humidBase)
-      , humidLimit(humidLimit) {
-
-      for (int i = 0; i < 3; ++i) {
-         for (int j = 0; j < COLOR_SIZE; ++j) {
-          this->colors[j][i] = colors[j][i];
-         }
-      }
-    }
+      , humidLimit(humidLimit) 
 
     String getName() {
       return name;
@@ -128,12 +121,15 @@ class DailyLook {
     void setCurrentUse(boolean currentUse) {
       currentUse = currentUse;
     }
-    void toString() {
+    void toString()
+{
         Serial.print("name : "); Serial.print(this->getName());
         Serial.print("\tscore : "); Serial.print(this->getScore());
         Serial.print("\tcategory : ");
-        for (int i=0; this->getCategory()[i]!=-1 && i<COLOR_SIZE; ++i){
-          switch(this->getCategory()[i]){
+        for (int i=0; this->getCategory()[i]!=-1 && i<COLOR_SIZE; ++i)
+{
+          switch(this->getCategory()[i])
+{
             case 0 :
              Serial.print("Outer");
              break;
@@ -229,15 +225,16 @@ int readButton(){
 /*
  * send a message to slave
  */
+
 void sendRGB(int category, int* rgb){
   Wire.beginTransmission(2);
   Wire.write(1); //sending RGB light value
   Wire.write(category);
   for (int i=0; i<3; ++i){
-    Wire.write(rgb[i]);   
+    Wire.write(rgb[i]);
   }
   Wire.endTransmission();
-}
+}			//sendRGB end
 
 void sendMessage(char yesno, String msg)
 {      /*
@@ -258,18 +255,11 @@ void sendMessage(char yesno, String msg)
   delay(500);
 }
 
-
-void scoreDailyLook () {
-  /*
-     TODO 점수 매기기
-  */
-}
-
 //sangwu의 코디와 옷장
 int scate[][3] = {
 	{1, 2, -1},
 	{1, 2, -1},
- {1, 2, -1},
+{1, 2, -1},
 	{1, 2, -1},
 	{1, 2, -1},
 	{1, 2, -1},
@@ -291,28 +281,28 @@ int scate[][3] = {
 
 int scolor[][3][3] = {
 	{
-		{139, 188, 255},
-		{250, 244, 192},
+		{255, 255, 255},
+		{255, 255, 255},
 		{-1, -1, -1}
 	},
 	{
-		{255, 228, 0},
+		{255, 255, 0},
 		{255, 255, 255},
 		{-1, -1, -1}
 	},
 	{
 		{0, 0, 0},
-		{255, 255, 36},
+		{255, 255, 255},
 		{-1, -1, -1}
 	},
 	{
-		{255, 94, 0},
+		{255, 255, 0},
 		{0, 0, 0},
 		{-1, -1, -1}
 	},
 	{
-		{153, 0, 76},
-		{0, 0, 119},
+		{255, 0, 255},
+		{0, 0, 255},
 		{-1, -1, -1}
 	},
 	{
@@ -322,71 +312,71 @@ int scolor[][3][3] = {
 	},
 	{
 		{0, 0, 0},
-		{0, 103, 0},
+		{0, 255, 0},
 		{-1, -1, -1}
 	},
 	{
-		{255, 133, 133},
-		{250, 244, 192},
+		{255, 255, 255},
+		{255, 255, 255},
 		{-1, -1, -1}
 	},
 	{
-		{243, 97, 220},
-		{0, 0, 119},
+		{255, 255, 255},
+		{0, 0, 255},
 		{-1, -1, -1}
 	},
 	{
-		{5, 0, 153},
-		{255, 255, 36},
+		{255, 0, 255},
+		{255, 255, 255},
 		{-1, -1, -1}
 	},
 	{
-		{0, 103, 0},
-		{0, 0, 119},
+		{0, 255, 0},
+		{0, 0, 255},
 		{-1, -1, -1}
 	},
 	{
-		{243, 202, 90},
-		{250, 244, 193},
-		{0, 0, 119}
+		{255, 255, 255},
+		{255, 255, 255},
+		{0, 0, 255}
 	},
 	{
-		{0, 0, 119},
+		{0, 0, 255},
 		{255, 255, 255},
 		{0, 0, 0}
 	},
 	{
-		{0, 103, 0},
-		{153, 0, 76},
-		{0, 0, 119}
+		{0, 255, 0},
+		{255, 0, 255},
+		{0, 0, 255}
 	},
 	{
-		{0, 0, 119},
-		{243, 202, 90},
+		{0, 0, 255},
+		{255, 255, 255},
 		{-1, -1, -1}
 	},
 	{
-		{243, 202, 90},
-		{166, 166, 166},
-		{0, 0, 119}
+		{255, 255, 255},
+		{255, 255, 255},
+		{0, 0, 255}
 	},
 	{
-		{0, 0, 119},
-		{153, 0, 76},
-		{0, 0, 119}
+		{0, 0, 255},
+		{255, 0, 255},
+		{0, 0, 255}
 	},
 	{
-		{0, 103, 0},
-		{166, 166, 166},
-		{250, 244, 192}
+		{0, 255, 0},
+		{255, 255, 255},
+		{255, 255, 255}
 	},
 	{
-		{153, 0, 76},
+		{255, 0, 255},
 		{0, 0, 0},
-		{0, 0, 119}
+		{0, 0, 255}
 	},
 	{
-		{166, 166, 166},
+		{255, 255, 255},
 		{255, 255, 255},
 		{0, 0, 0}
 	}
@@ -413,13 +403,9 @@ DailyLook sdl18 = DailyLook(String("deepgreen_outer & grey_shirt & ivory_pants")
 DailyLook sdl19 = DailyLook(String("wine_outer & black_shirt & deepblue_pants"), scate[18][0], scolor[18][0][0], -40, 10, 0, 65);
 DailyLook sdl20 = DailyLook(String("grey_outer & white_shirt & black_pants"), scate[19][0], scolor[19][0][0], -40, 10, 0, 65);
 
-
-
-DailyLook* SangwuList[] = {&sdl1, &sdl2, &sdl3, &sdl4, &sdl5, &sdl6, &sdl7, &sdl8, &sdl9, &sdl10, &sdl11, &sdl12, &sdl13, &sdl14, &sdl15, &sdl16, &sdl17, &sdl18, &sdl19, &sdl20 };
+DailyLook* SangwuList[] = { &sdl1, &sdl2, &sdl3, &sdl4, &sdl5, &sdl6, &sdl7, &sdl8, &sdl9, &sdl10, &sdl11, &sdl12, &sdl13, &sdl14, &sdl15, &sdl16, &sdl17, &sdl18, &sdl19, &sdl20 };
 
 Closet* sangwuCloset = new Closet("Sangwu", 23);
-
-
 
 //eunjin의 코디와 옷장
 int ecate[][3] = {
@@ -448,102 +434,102 @@ int ecate[][3] = {
 int ecolor[][3][3] = {
  {
 		{255, 255, 255},
-		{255, 133, 133},
+		{255, 255, 255},
 		{-1, -1, -1}
 	},
 	{
-		{189, 255, 18},
+		{255, 255, 255},
 		{255, 255, 255},
 		{-1, -1, -1}
 	},
 {
 	{255, 255, 255},
-	{153, 0, 76},
+	{255, 0, 255},
 	{-1, -1, -1}
 },
 {
-	{1, 0, 255},
+	{255, 0, 255},
 	{255, 255, 255},
 	{-1, -1, -1}
 },
 {
-	{255, 133, 133},
-	{255, 255, 36},
+	{255, 255, 255},
+	{255, 255, 255},
 	{-1, -1, -1}
 },
 {
 	{255, 255, 255},
-	{1, 0, 255},
+	{255, 0, 255},
 	{-1, -1, -1}
 },
 {
-	{255, 255, 36},
-	{1, 0, 255},
+	{255, 255, 255},
+	{255, 0, 255},
 	{-1, -1, -1}
 },
 {
-	{128, 65, 217},
-	{255, 133, 133},
+	{255, 255, 255},
+	{255, 255, 255},
 	{-1, -1, -1}
 },
 {
 	{255, 0, 0},
-	{128, 65 ,217},
+	{255, 255, 255},
 	{-1, -1, -1}
 },
 {
-	{255, 133, 133},
-	{5, 0, 153},
+	{255, 255, 255},
+	{255, 0, 255},
 	{-1, -1, -1}
 },
 {
-	{128, 65, 217},
-	{166, 166, 166},
+	{255, 255, 255},
+	{255, 255, 255},
 	{-1, -1, -1}
 },
 {
-	{232, 218, 179},
-	{206, 251, 201},
-	{1, 0, 255}
+	{255, 255, 255},
+	{255, 255, 255},
+	{255, 0, 255}
 },
 {
-	{135, 38, 0},
+	{255, 255, 0},
 	{255, 255, 255},
 	{0, 0, 0}
 },
 {
-	{250, 244, 192},
-	{128, 65, 217},
+	{255, 255, 255},
+	{255, 255, 255},
 	{255, 0, 0}
 },
 {
 	{0, 0, 0},
 	{255, 255, 255},
-	{89, 135, 0}
+	{255, 255, 0}
 },
 {
-	{153, 255, 217},
-	{1, 0, 255},
+	{255, 255, 255},
+	{255, 0, 255},
 	{255, 255, 255}
 },
 {
-	{243, 202, 90},
+	{255, 255, 255},
 	{0, 0, 0},
-	{153, 0, 76}
+	{255, 0, 255}
 },
 {
 	{0, 0, 0},
-	{0, 0, 119},
+	{0, 0, 255},
 	{0, 0, 0}
 },
 {
-	{166, 166, 166},
 	{255, 255, 255},
-	{1, 0, 255}
+	{255, 255, 255},
+	{255, 0, 255}
 },
 {
-	{0, 0, 199},
-	{166, 166, 166},
+	{0, 0, 255},
+	{255, 255, 255},
 	{0, 0, 0}
  };
 }
@@ -582,7 +568,7 @@ void setup() {
   sangwuCloset->setList(SangwuList);
   eunjinCloset->setList(EunjinList);
  
-  //led setup 
+  //led setup
   pinMode(LED3_RED, OUTPUT);
   pinMode(LED3_GRE, OUTPUT);
   pinMode(LED3_BLU, OUTPUT);
@@ -626,25 +612,16 @@ void loop() {
     status = myRFID.AddicoreRFID_Anticoll(str);
     if (status == MI_OK)      //MIFARE 카드일때만 작동
     {
-          /*
-          checksum1 = str[0] ^ str[1] ^ str[2] ^ str[3];
-          Serial.println("The tag's number is  : ");
-            //Serial.print(2);
-            Serial.print(str[0]);
-          Serial.print(" , ");
-            Serial.print(str[1],BIN);
-          Serial.print(" , ");
-            Serial.print(str[2],BIN);
-          Serial.print(" , ");
-            Serial.print(str[3],BIN);
-          Serial.print(" , ");
-            Serial.print(str[4],BIN);
-          Serial.print(" , ");
-          Serial.println(checksum1,BIN);
-          */ 
-            // Should really check all pairs, but for now we'll just use the first
-           if(str[0] == 64) {             //RFID 태그의 ID값이 64번이면 Sangwu의 카드
-                
+if(str[0] == 64) {             //RFID 태그의 ID값이 64번이면 Sangwu의 카드
+DailyLook recommand[] = {};
+for (int i=0; i < 20; i++)
+{
+			recommand[i]->getScore();		//recommand에는 점수가 저장되어 있음
+}
+		for (int i=0; i < 20; i++)
+		{
+		}
+
              //반복문으로 코디 탐색하다가 온도 만족하면 코디 string 출력, RGB값 전송		//그렇지 않으면 continue
              //no 선택 시 반복문 반복			//yes 선택 시 프로그램 종료
              //i가 19가 되면 추천 코디 소진 알림
@@ -695,3 +672,5 @@ void printWeather(int temper, int humid) {
 
   */
 }
+
+d
