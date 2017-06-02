@@ -33,7 +33,7 @@ uchar fifoValue;
  
 AddicoreRFID myRFID; // create AddicoreRFID object to control the RFID module
 
-DHT11 dht11(TEM_HUM); 
+DHT11 dht11(TEM_HUM);
 
 int  err;
 float curtemp, curhumid;
@@ -249,10 +249,17 @@ void sendMessage(char yesno, String msg)
     Wire.write('!');
   } // 3. send Message
   for (int i=0; i<msg.length(); ++i){
-    Wire.write(msg[i]);   
+    Wire.write(msg[i]);
   }
   Wire.endTransmission(); //message buffer is sent with Wire.endTransmission()                   
   delay(500);
+}
+
+void swap(int* a, int* b)
+{
+  int temp = *a;
+  *a = *b;
+  *b = temp;
 }
 
 //sangwu의 코디와 옷장
@@ -611,21 +618,16 @@ void loop() {
   //RFID 충돌방지, RFID 태그의 ID값(시리얼넘버) 등 저장된 값을 리턴함. 4Byte
     status = myRFID.AddicoreRFID_Anticoll(str);
     if (status == MI_OK)      //MIFARE 카드일때만 작동
-    {
+{
 if(str[0] == 64) {             //RFID 태그의 ID값이 64번이면 Sangwu의 카드
+	Serial.print("Hello Sangwu!\n");
+
 DailyLook recommand[] = {};
 for (int i=0; i < 20; i++)
 {
-			recommand[i]->getScore();		//recommand에는 점수가 저장되어 있음
+	recommand[i]->getScore();		//recommand에는 점수가 저장되어 있음
 }
-		for (int i=0; i < 20; i++)
-		{
-		}
-
-             //반복문으로 코디 탐색하다가 온도 만족하면 코디 string 출력, RGB값 전송		//그렇지 않으면 continue
-             //no 선택 시 반복문 반복			//yes 선택 시 프로그램 종료
-             //i가 19가 되면 추천 코디 소진 알림
-            }
+}
                 
            else if(str[0] == 100) {            //RFID 태그의 ID값이 100번이면 Eunjin의 카드
                 Serial.print("Hello Eunjin!\n");
@@ -673,4 +675,3 @@ void printWeather(int temper, int humid) {
   */
 }
 
-d
