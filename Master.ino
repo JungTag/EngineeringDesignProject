@@ -222,6 +222,10 @@ int readButton(){
   Wire.requestFrom(SLAVE, 2);
   return Wire.read();
 }
+
+if(readButton() == BTN_PIN1) list[i] -> setScore(list[i] -> getScore() + 1);
+
+else if(readButton() == BTN_PIN2) list[i] -> setScore(list[i] -> getScore() - 1);
 /*
  * send a message to slave
  */
