@@ -64,7 +64,7 @@ void loop() {
 }
 }
 
-/*반짝반짝 작은별
+//반짝반짝 작은별
 int speakerPin = 8;
 
 int length = 15;
@@ -107,4 +107,3 @@ void loop() {
     delay(tempo / 2); 
   }
 }
-*/
