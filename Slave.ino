@@ -99,8 +99,9 @@ void receiveFromMaster(int bytes) {
     }
   }
 
+
 void sendBtnInfo() {
-  Wire.write("HI, I am  Slave. ");
+  //Wire.write("HI, I am  Slave. ");
   // send button information
   while(true){
     if (digitalRead(BTN_PIN1) == LOW) //if Yes was pressed
